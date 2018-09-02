@@ -23,7 +23,7 @@ public class login extends javax.swing.JFrame {
    //  Database credentials
    static final String USER = "root";
    //static final String  = "";//enter your mysql password here
-    public static final String PASS =  JOptionPane.showInputDialog(null,"Enter the password for MySQL Database", JOptionPane.PLAIN_MESSAGE);
+    public static final String PASS =  JOptionPane.showInputDialog(null,"Enter the password for MySQL Database");
     
     Connection conn = null;
     ResultSet rs = null;
