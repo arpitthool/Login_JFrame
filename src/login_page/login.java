@@ -21,7 +21,7 @@ public class login extends javax.swing.JFrame {
 
    //  Database credentials
    static final String USER = "root";
-   static final String PASS = "@april1998";
+   static final String PASS = "";//enter your mysql password here
    
     
     Connection conn = null;
