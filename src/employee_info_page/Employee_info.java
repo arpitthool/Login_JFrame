@@ -3,9 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package login_page;
+package employee_info_page;
+
+import login_page.login;
 import javax.swing.*;
 import java.sql.*;
+import static login_page.login.PASS;
 import net.proteanit.sql.DbUtils;
 //import net.proteanit.sql.DbUtils;
 
@@ -25,7 +28,6 @@ public class Employee_info extends javax.swing.JFrame {
 
     //  Database credentials
     static final String USER = "root";
-    static final String PASS = "";//enter your mysql password here
     
     /**
      * Creates new form Employee_info
@@ -33,7 +35,8 @@ public class Employee_info extends javax.swing.JFrame {
     public Employee_info() {
         initComponents();
         try{
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            //final String PASS =  JOptionPane.showInputDialog(null,"Enter the password for MySQL Database");
+            conn = DriverManager.getConnection(DB_URL, USER,PASS );
         }
         catch(Exception e){
             JOptionPane.showMessageDialog(null, e);
@@ -261,7 +264,7 @@ public class Employee_info extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Employee_info().setVisible(true);
+                new Employee_info( ).setVisible(true);
             }
         });
     }

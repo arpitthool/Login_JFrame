@@ -9,6 +9,7 @@ package login_page;
  *
  * @author arpit
  */
+import employee_info_page.Employee_info;
 import javax.swing.*;
 import java.sql.*;
 import java.awt.event.WindowEvent;
@@ -21,8 +22,8 @@ public class login extends javax.swing.JFrame {
 
    //  Database credentials
    static final String USER = "root";
-   static final String PASS = "";//enter your mysql password here
-   
+   //static final String  = "";//enter your mysql password here
+    public static final String PASS =  JOptionPane.showInputDialog(null,"Enter the password for MySQL Database", JOptionPane.PLAIN_MESSAGE);
     
     Connection conn = null;
     ResultSet rs = null;
