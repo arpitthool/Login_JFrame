@@ -101,6 +101,9 @@
       </Layout>
       <SubComponents>
         <Component class="javax.swing.JPasswordField" name="txt_password">
+          <Events>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txt_passwordKeyPressed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
@@ -119,6 +122,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txt_username">
+          <Events>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txt_usernameKeyPressed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btn_login">
           <Properties>
@@ -136,7 +142,7 @@
     <Component class="javax.swing.JLabel" name="jlabel_icon">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/login_page/giphy.gif"/>
+          <Image iconType="3" name="/login_window/giphy.gif"/>
         </Property>
       </Properties>
       <Constraints>

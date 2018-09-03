@@ -1,15 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package login_page;
+package login_window;
 
 /**
  *
  * @author arpit
  */
-import employee_info_page.Employee_info;
+import com.sun.glass.events.KeyEvent;
+import employee_info_window.Employee_info;
 import javax.swing.*;
 import java.sql.*;
 import java.awt.event.WindowEvent;
@@ -17,12 +13,12 @@ import java.awt.event.WindowEvent;
 public class login extends javax.swing.JFrame {
     
     // JDBC driver name and database URL
-   static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-   static final String DB_URL = "jdbc:mysql://localhost:3306/login_jframe";
+    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+    static final String DB_URL = "jdbc:mysql://localhost:3306/login_jframe";
 
-   //  Database credentials
-   static final String USER = "root";
-   //static final String  = "";//enter your mysql password here
+    //  Database credentials
+    static final String USER = "root";
+    //static final String  = "";//enter your mysql password here
     public static final String PASS =  JOptionPane.showInputDialog(null,"Enter the password for MySQL Database");
     
     Connection conn = null;
@@ -44,7 +40,7 @@ public class login extends javax.swing.JFrame {
     public void close(){
         //WindowEvent window_close = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
         //Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(window_close);
-        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));//better way
     }
     
     @Override
@@ -90,11 +86,23 @@ public class login extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Login", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 18), new java.awt.Color(0, 0, 0))); // NOI18N
         jPanel1.setInheritsPopupMenu(true);
 
+        txt_password.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txt_passwordKeyPressed(evt);
+            }
+        });
+
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Password");
 
         jLabel_username.setForeground(new java.awt.Color(0, 0, 0));
         jLabel_username.setText("Username");
+
+        txt_username.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txt_usernameKeyPressed(evt);
+            }
+        });
 
         btn_login.setBackground(new java.awt.Color(0, 102, 255));
         btn_login.setText("Login");
@@ -142,7 +150,7 @@ public class login extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 70, -1, 150));
 
-        jlabel_icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/login_page/giphy.gif"))); // NOI18N
+        jlabel_icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/login_window/giphy.gif"))); // NOI18N
         getContentPane().add(jlabel_icon, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, 260));
 
         pack();
@@ -185,6 +193,27 @@ public class login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e);
         }
     }//GEN-LAST:event_btn_loginActionPerformed
+    
+    /*
+    if enter is pressed moves focus from username field area to password field
+    */
+    private void txt_usernameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_usernameKeyPressed
+        
+        if(evt.getKeyChar() == KeyEvent.VK_ENTER)
+        {                     // for enter key
+          txt_password.requestFocus();
+        } 
+    }//GEN-LAST:event_txt_usernameKeyPressed
+
+    /*
+    pressing enter key is equivalent to clicking the login button
+    */
+    private void txt_passwordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_passwordKeyPressed
+        if(evt.getKeyChar() == KeyEvent.VK_ENTER)
+        {                     // for enter key
+            btn_login.doClick();
+        } 
+    }//GEN-LAST:event_txt_passwordKeyPressed
 
     /**
      * @param args the command line arguments

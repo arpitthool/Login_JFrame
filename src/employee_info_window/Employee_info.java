@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package employee_info_page;
+package employee_info_window;
 
 import javax.swing.*;
 import java.sql.*;
-import static login_page.login.PASS;
+import static login_window.login.PASS;
 import net.proteanit.sql.DbUtils;
 //import net.proteanit.sql.DbUtils;
 
@@ -42,6 +42,23 @@ public class Employee_info extends javax.swing.JFrame {
         }
         update_jtable();
         Fill_combo();
+    }
+    
+    //close the connection to MySQL dadtabase when the window is closed
+    @Override
+    public void finalize() {
+      try{
+           if(pst!=null)
+              pst.close();
+        }catch(SQLException se2){
+        }// nothing we can do
+        try{
+           if(conn!=null)
+              conn.close();
+           System.out.println("Connection closed.");
+        }catch(SQLException se){
+           se.printStackTrace();
+        }//end finally try
     }
     
     private void Fill_combo(){
