@@ -3,8 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/arpit/NetBeansProjects/Login_JFrame/src/login_page/login.java</file>
-            <file>file:/home/arpit/NetBeansProjects/Login_JFrame/src/employee_info_page/Employee_info.java</file>
+            <file>file:/home/arpit/NetBeansProjects/Login_JFrame/src/employee_info_window/Employee_info.java</file>
+            <file>file:/home/arpit/NetBeansProjects/Login_JFrame/src/login_window/login.java</file>
+            <file>file:/home/arpit/NetBeansProjects/Login_JFrame/src/employee_info_window/User_info.java</file>
         </group>
     </open-files>
 </project-private>

@@ -38,6 +38,7 @@ public class login extends javax.swing.JFrame {
     }
     
     public void close(){
+        finalize();
         //WindowEvent window_close = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
         //Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(window_close);
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));//better way
@@ -98,6 +99,11 @@ public class login extends javax.swing.JFrame {
         jLabel_username.setForeground(new java.awt.Color(0, 0, 0));
         jLabel_username.setText("Username");
 
+        txt_username.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_usernameActionPerformed(evt);
+            }
+        });
         txt_username.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txt_usernameKeyPressed(evt);
@@ -214,6 +220,10 @@ public class login extends javax.swing.JFrame {
             btn_login.doClick();
         } 
     }//GEN-LAST:event_txt_passwordKeyPressed
+
+    private void txt_usernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_usernameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_usernameActionPerformed
 
     /**
      * @param args the command line arguments

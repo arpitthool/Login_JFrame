@@ -4,9 +4,11 @@
  * and open the template in the editor.
  */
 package employee_info_window;
-
+import com.sun.glass.events.KeyEvent;
+import java.awt.event.WindowEvent;
 import javax.swing.*;
 import java.sql.*;
+import java.util.GregorianCalendar;
 import static login_window.login.PASS;
 import net.proteanit.sql.DbUtils;
 //import net.proteanit.sql.DbUtils;
@@ -40,13 +42,15 @@ public class Employee_info extends javax.swing.JFrame {
         catch(Exception e){
             JOptionPane.showMessageDialog(null, e);
         }
-        update_jtable();
-        Fill_combo();
+        this.update_jtable();
+        this.Fill_combo();
+        this.show_current_date_time();
     }
     
     //close the connection to MySQL dadtabase when the window is closed
     @Override
     public void finalize() {
+        System.out.println("finalize method called");
       try{
            if(pst!=null)
               pst.close();
@@ -67,6 +71,7 @@ public class Employee_info extends javax.swing.JFrame {
             pst = conn.prepareStatement(sql);
             rs = pst.executeQuery();
             
+            //combobox.removeAll();
             while( rs.next()){
                 combobox.addItem( rs.getString( "name"));
             }
@@ -88,6 +93,26 @@ public class Employee_info extends javax.swing.JFrame {
         }
     }
     
+    public void close(){
+        this.finalize();
+        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }
+    
+    public void show_current_date_time(){
+        GregorianCalendar cal = new GregorianCalendar();
+        int day = cal.get(GregorianCalendar.DAY_OF_MONTH),
+                month = cal.get( GregorianCalendar.MONTH),
+                year = cal.get(GregorianCalendar.YEAR);
+        
+        menu_date.setText( "Date :"+day + "/" + month+1 + "/" + year);
+        
+        int seconds = cal.get(GregorianCalendar.SECOND),
+                minutes = cal.get( GregorianCalendar.MINUTE),
+                hours = cal.get(GregorianCalendar.HOUR_OF_DAY);
+        
+        menu_time.setText("Time :"+ hours + ":" + minutes + ":" + seconds);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -100,6 +125,11 @@ public class Employee_info extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         table_employee = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
+        combobox = new javax.swing.JComboBox<>();
+        jPanel4 = new javax.swing.JPanel();
+        txt_search = new javax.swing.JTextField();
+        btn_search = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jtxt_job = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -111,11 +141,26 @@ public class Employee_info extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jlabel_employeeid = new javax.swing.JLabel();
         jtxt_employeeid = new javax.swing.JTextField();
-        combobox = new javax.swing.JComboBox<>();
+        jPanel3 = new javax.swing.JPanel();
+        btn_save = new javax.swing.JButton();
+        btn_new_user_info = new javax.swing.JButton();
+        btn_delete_user = new javax.swing.JButton();
+        btn_update = new javax.swing.JButton();
+        btn_update1 = new javax.swing.JButton();
+        jToolBar1 = new javax.swing.JToolBar();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        menu_item_new = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        menu_item_close = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        menu_date = new javax.swing.JMenu();
+        menu_time = new javax.swing.JMenu();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setLocation(new java.awt.Point(300, 100));
 
+        table_employee.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(0, 153, 51), null, null));
         table_employee.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -132,7 +177,73 @@ public class Employee_info extends javax.swing.JFrame {
                 table_employeeMouseClicked(evt);
             }
         });
+        table_employee.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                table_employeeKeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(table_employee);
+
+        jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        combobox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                comboboxPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
+        combobox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboboxActionPerformed(evt);
+            }
+        });
+
+        jPanel4.setBorder(new javax.swing.border.MatteBorder(null));
+
+        txt_search.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_searchActionPerformed(evt);
+            }
+        });
+        txt_search.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txt_searchKeyPressed(evt);
+            }
+        });
+
+        btn_search.setIcon(new javax.swing.ImageIcon(getClass().getResource("/employee_info_window/Start-Menu-Search-icon.png"))); // NOI18N
+        btn_search.setText("Search");
+        btn_search.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_searchActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txt_search)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btn_search, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btn_search)
+                    .addComponent(txt_search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 102, 0)));
 
         jLabel5.setText("City");
 
@@ -154,16 +265,19 @@ public class Employee_info extends javax.swing.JFrame {
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jlabel_employeeid, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
+                    .addComponent(jlabel_employeeid, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jtxt_name, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtxt_employeeid, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtxt_age, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtxt_job, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtxt_city, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jtxt_employeeid, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
+                                .addComponent(jtxt_city))
+                            .addComponent(jtxt_age, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jtxt_job, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jtxt_name, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -188,93 +302,279 @@ public class Employee_info extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jtxt_city, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(56, Short.MAX_VALUE))
+        );
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        btn_save.setIcon(new javax.swing.ImageIcon(getClass().getResource("/employee_info_window/Save-icon.png"))); // NOI18N
+        btn_save.setText("Save");
+        btn_save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_saveActionPerformed(evt);
+            }
+        });
+
+        btn_new_user_info.setIcon(new javax.swing.ImageIcon(getClass().getResource("/employee_info_window/1new-file-icon.png"))); // NOI18N
+        btn_new_user_info.setText("New");
+        btn_new_user_info.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_new_user_infoActionPerformed(evt);
+            }
+        });
+
+        btn_delete_user.setIcon(new javax.swing.ImageIcon(getClass().getResource("/employee_info_window/trash-icon.png"))); // NOI18N
+        btn_delete_user.setText("Delete");
+        btn_delete_user.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_delete_userActionPerformed(evt);
+            }
+        });
+
+        btn_update.setIcon(new javax.swing.ImageIcon(getClass().getResource("/employee_info_window/edit-icon.png"))); // NOI18N
+        btn_update.setText("Update");
+        btn_update.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_updateActionPerformed(evt);
+            }
+        });
+
+        btn_update1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/employee_info_window/Clear-icon.png"))); // NOI18N
+        btn_update1.setText("Clear");
+        btn_update1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_update1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btn_new_user_info, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_save, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_delete_user, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_update, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_update1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btn_save)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btn_new_user_info)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btn_delete_user)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btn_update)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btn_update1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        combobox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                comboboxPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-        });
-        combobox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboboxActionPerformed(evt);
-            }
-        });
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(combobox, 0, 232, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(combobox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13)
                 .addComponent(combobox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
+
+        jToolBar1.setRollover(true);
+
+        jMenu1.setText("File");
+
+        menu_item_new.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        menu_item_new.setIcon(new javax.swing.ImageIcon(getClass().getResource("/employee_info_window/Files-New-File-icon.png"))); // NOI18N
+        menu_item_new.setText("New");
+        jMenu1.add(menu_item_new);
+        jMenu1.add(jSeparator1);
+
+        menu_item_close.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        menu_item_close.setIcon(new javax.swing.ImageIcon(getClass().getResource("/employee_info_window/delete-icon.png"))); // NOI18N
+        menu_item_close.setText("Close");
+        menu_item_close.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menu_item_closeActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menu_item_close);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
+
+        menu_date.setText("Date");
+        jMenuBar1.add(menu_date);
+
+        menu_time.setText("Time");
+        jMenuBar1.add(menu_time);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(0, 39, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void comboboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboboxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboboxActionPerformed
-
     private void table_employeeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_employeeMouseClicked
         int row = table_employee.getSelectedRow();
         jtxt_employeeid.setText( table_employee.getModel().getValueAt( row, 0).toString());
         jtxt_name.setText( table_employee.getModel().getValueAt( row, 1).toString());
         jtxt_age.setText( table_employee.getModel().getValueAt( row, 2).toString());
-        jtxt_job.setText( table_employee.getModel().getValueAt( row, 5).toString());
-        jtxt_city.setText( table_employee.getModel().getValueAt( row, 6).toString());
+        jtxt_job.setText( table_employee.getModel().getValueAt( row, 3).toString());
+        jtxt_city.setText( table_employee.getModel().getValueAt( row, 4).toString());
 
     }//GEN-LAST:event_table_employeeMouseClicked
 
+    private void menu_item_closeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_item_closeActionPerformed
+        this.close();
+    }//GEN-LAST:event_menu_item_closeActionPerformed
+
+    private void btn_update1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_update1ActionPerformed
+        jtxt_employeeid.setText( "");
+        jtxt_name.setText( "");
+        jtxt_age.setText( "");
+        jtxt_job.setText( "");
+        jtxt_city.setText( "");
+    }//GEN-LAST:event_btn_update1ActionPerformed
+
+    private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
+        try{
+            String sql = "update employee_info set id ='"+jtxt_employeeid.getText()+"' , name ='"+jtxt_name.getText()+"' , "
+            + "age = '"+jtxt_age.getText()+"', job = '"+jtxt_job.getText()+"', city = '"+jtxt_city.getText()+"'"
+            + "where id = '"+jtxt_employeeid.getText()+"'";
+            pst = conn.prepareStatement(sql);
+
+            pst.execute();
+
+            JOptionPane.showMessageDialog(null,"Record is updated in database.");
+            this.update_jtable();
+            this.Fill_combo();
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_btn_updateActionPerformed
+
+    private void btn_delete_userActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_delete_userActionPerformed
+        try{
+            String sql = "delete from employee_info where id = ?;";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, jtxt_employeeid.getText());
+
+            pst.execute();
+
+            JOptionPane.showMessageDialog(null,"Record is deleted from database.");
+            this.update_jtable();
+            this.Fill_combo();
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_btn_delete_userActionPerformed
+
+    private void btn_new_user_infoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_new_user_infoActionPerformed
+        this.close();
+        User_info user = new User_info();
+        user.setVisible(true);
+    }//GEN-LAST:event_btn_new_user_infoActionPerformed
+
+    private void btn_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_saveActionPerformed
+        try{
+            String sql = "insert into employee_info (id, name, age, job, city) values (?,?,?,?,?)";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, jtxt_employeeid.getText());
+            pst.setString(2, jtxt_name.getText());
+            pst.setString(3, jtxt_age.getText());
+            pst.setString(4, jtxt_job.getText());
+            pst.setString(5, jtxt_city.getText());
+            pst.execute();
+
+            JOptionPane.showMessageDialog(null,"Data is saved in database.");
+            this.update_jtable();
+            this.Fill_combo();
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_btn_saveActionPerformed
+
+    private void comboboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboboxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboboxActionPerformed
+
     private void comboboxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_comboboxPopupMenuWillBecomeInvisible
-        
+
         try{
             String sql = "select * from employee_info where name = ?;";
             pst = conn.prepareStatement(sql);
             pst.setString(1, combobox.getSelectedItem().toString());
             rs = pst.executeQuery();
-            
+
             if( rs.next()){
                 jtxt_employeeid.setText( rs.getString("id"));
                 jtxt_name.setText( rs.getString("name"));
@@ -287,6 +587,64 @@ public class Employee_info extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e);
         }
     }//GEN-LAST:event_comboboxPopupMenuWillBecomeInvisible
+
+    private void btn_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_searchActionPerformed
+        try{
+            String search_txt = txt_search.getText();
+            if(search_txt.equals("")){
+                this.update_jtable();
+                return;
+            }
+            String sql = "select * from employee_info where name = '"+search_txt+"' or id = '"+search_txt+"' or age = '"+search_txt+"' or job = '"+search_txt+"' or city = '"+search_txt+"';";
+            pst = conn.prepareStatement(sql);
+            
+            rs = pst.executeQuery();
+            table_employee.setModel(DbUtils.resultSetToTableModel(rs));
+
+            if( rs.next()){
+                jtxt_employeeid.setText( rs.getString("id"));
+                jtxt_name.setText( rs.getString("name"));
+                jtxt_age.setText( rs.getString("age"));
+                jtxt_job.setText( rs.getString("job"));
+                jtxt_city.setText( rs.getString("city"));
+            }
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_btn_searchActionPerformed
+
+    private void txt_searchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_searchKeyPressed
+        if(evt.getKeyChar() == KeyEvent.VK_ENTER)
+        {                     // for enter key
+            btn_search.doClick();
+        }
+    }//GEN-LAST:event_txt_searchKeyPressed
+
+    private void txt_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_searchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_searchActionPerformed
+
+    private void table_employeeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_table_employeeKeyPressed
+        if( evt.getKeyCode() == KeyEvent.VK_DOWN ){
+           int row = table_employee.getSelectedRow() + 1;
+            jtxt_employeeid.setText( table_employee.getModel().getValueAt( row, 0).toString());
+            jtxt_name.setText( table_employee.getModel().getValueAt( row, 1).toString());
+            jtxt_age.setText( table_employee.getModel().getValueAt( row, 2).toString());
+            jtxt_job.setText( table_employee.getModel().getValueAt( row, 3).toString());
+            jtxt_city.setText( table_employee.getModel().getValueAt( row, 4).toString());
+
+        }
+        if( evt.getKeyCode() == KeyEvent.VK_UP){
+           int row = table_employee.getSelectedRow() - 1;
+            jtxt_employeeid.setText( table_employee.getModel().getValueAt( row, 0).toString());
+            jtxt_name.setText( table_employee.getModel().getValueAt( row, 1).toString());
+            jtxt_age.setText( table_employee.getModel().getValueAt( row, 2).toString());
+            jtxt_job.setText( table_employee.getModel().getValueAt( row, 3).toString());
+            jtxt_city.setText( table_employee.getModel().getValueAt( row, 4).toString());
+
+        }
+    }//GEN-LAST:event_table_employeeKeyPressed
 
     /**
      * @param args the command line arguments
@@ -324,20 +682,39 @@ public class Employee_info extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_delete_user;
+    private javax.swing.JButton btn_new_user_info;
+    private javax.swing.JButton btn_save;
+    private javax.swing.JButton btn_search;
+    private javax.swing.JButton btn_update;
+    private javax.swing.JButton btn_update1;
     private javax.swing.JComboBox<String> combobox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel jlabel_employeeid;
     private javax.swing.JTextField jtxt_age;
     private javax.swing.JTextField jtxt_city;
     private javax.swing.JTextField jtxt_employeeid;
     private javax.swing.JTextField jtxt_job;
     private javax.swing.JTextField jtxt_name;
+    private javax.swing.JMenu menu_date;
+    private javax.swing.JMenuItem menu_item_close;
+    private javax.swing.JMenuItem menu_item_new;
+    private javax.swing.JMenu menu_time;
     private javax.swing.JTable table_employee;
+    private javax.swing.JTextField txt_search;
     // End of variables declaration//GEN-END:variables
 }
